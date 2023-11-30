@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Another Chess Engine</title>
+    <style>
+        :root {
+            --board-tile-size: 8vmin;
+        }
+
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #202020;
+        }
+
+        .board-holder {
+            user-select: none;
+            font-weight: normal;
+        }
+
+        .board-holder>span {
+            width: var(--board-tile-size);
+            height: var(--board-tile-size);
+            background-color: #505050;
+            float: right;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: var(--board-tile-size);
+        }
+
+        .board-holder>span:nth-child(2n) {
+            background-color: #707070;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="board-holder" class="board-holder"></div>
+    <script>
+        class Board {
+            constructor(layout, teammap, piecemap) {
+                const data = layout.map(row => row.split(" "));
+                this.matrix = [];
+                this.width = data[0].length;
+                this.height = data.length;
+                for (let y = 0; y < this.height; y++) {
+                    this.matrix[y] = [];
+                    const row = data[y];
+                    for (let x = 0; x < this.width; x++) {
+                        const tile = row[x];
+                        this.matrix[y][x] = {
+                            piece: piecemap.get(tile.slice(1)),
+                            team: teammap.get(tile.slice(0, 1))
+                        }
+                    }
+                }
+            }
+        }
+        class Game {
+            static teams = new Map([
+                ["white", "#FFFFFF"],
+                ["black", "#000000"]
+            ]);
+            static pieces = new Map([
+                ["king", "♔"],
+                ["queen", "♕"],
+                ["rook", "♖"],
+                ["bishop", "♗"],
+                ["knight", "♘"],
+                ["pawn", "♙"]
+            ]);
+            static board = new Board(
+                [
+                    `BR BN BB BQ BK BB BN BR`,
+                    `BP BP BP BP BP BP BP BP`,
+                    `EE EE EE EE EE EE EE EE`,
+                    `EE EE EE EE EE EE EE EE`,
+                    `EE EE EE EE EE EE EE EE`,
+                    `EE EE EE EE EE EE EE EE`,
+                    `WP WP WP WP WP WP WP WP`,
+                    `WR WN WB WQ WK WB WN WR`
+                ],
+                new Map([
+                    ["B", "black"],
+                    ["W", "white"],
+                    ["E", null]
+                ]),
+                new Map([
+                    ["K", "king"],
+                    ["Q", "queen"],
+                    ["B", "bishop"],
+                    ["N", "knight"],
+                    ["R", "rook"],
+                    ["P", "pawn"],
+                    ["E", null]
+                ])
+            );
+        }
+
+        const boardElement = document.getElementById("board-holder");
+        for (let y = 0; y < Game.board.height; y++) {
+            for (let x = 0; x < Game.board.width; x++) {
+                const element = document.createElement("span");
+                boardElement.appendChild(element);
+            }
+            boardElement.appendChild(document.createElement("br"));
+        }
+
+        function refreshBoard() {
+            for (let y = 0; y < Game.board.height; y++) {
+                const row = Game.board.matrix[y];
+                for (let x = 0; x < Game.board.width; x++) {
+                    const element = boardElement.children[(y * (Game.board.width + 1)) + (Game.board.width - 1 - x)];
+                    const tile = row[x];
+                    if (tile === null) {
+                        element.textContent = "";
+                        continue;
+                    }
+                    element.textContent = Game.pieces.get(tile.piece);
+                    element.style.color = Game.teams.get(tile.team);
+                }
+            }
+        }
+
+        refreshBoard();
+    </script>
+</body>
+
+</html>
