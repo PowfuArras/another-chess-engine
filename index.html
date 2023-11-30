@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Another Chess Engine</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            outline: none;
+        }
+
         :root {
             --board-tile-size: 8vmin;
         }
@@ -19,7 +26,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0;
             width: 100%;
             height: 100%;
             background-color: #202020;
@@ -31,6 +37,7 @@
         }
 
         .board-holder>span {
+            font-family: monospace;
             width: var(--board-tile-size);
             height: var(--board-tile-size);
             background-color: #505050;
@@ -38,8 +45,9 @@
             display: flex;
             justify-content: center;
             align-items: center;
-
-            font-size: var(--board-tile-size);
+            text-align: center;
+            font-weight: bolder;
+            font-size: 6vmin;
         }
 
         .board-holder>span:nth-child(2n) {
@@ -76,12 +84,12 @@
                 ["black", "#000000"]
             ]);
             static pieces = new Map([
-                ["king", ["♔", "*1"]],
-                ["queen", ["♕", "*n"]],
-                ["rook", ["♖", "+n"]],
-                ["bishop", ["♗", "Xn"]],
-                ["knight", ["♘", "L21"]], 
-                ["pawn", ["♙", "^1|^2"]]
+                ["king", ["Ⓚ", "*1"]],
+                ["queen", ["Ⓠ", "*n"]],
+                ["rook", ["Ⓡ", "+n"]],
+                ["bishop", ["Ⓑ", "Xn"]],
+                ["knight", ["Ⓝ", "L21"]], 
+                ["pawn", ["ⓟ", "^1|^2"]]
             ]);
             static currentTurn = this.teams.keys().next().value;
             static board = new Board(
