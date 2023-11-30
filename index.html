@@ -76,13 +76,14 @@
                 ["black", "#000000"]
             ]);
             static pieces = new Map([
-                ["king", "♔"],
-                ["queen", "♕"],
-                ["rook", "♖"],
-                ["bishop", "♗"],
-                ["knight", "♘"],
-                ["pawn", "♙"]
+                ["king", ["♔", "*1"]],
+                ["queen", ["♕", "*n"]],
+                ["rook", ["♖", "+n"]],
+                ["bishop", ["♗", "Xn"]],
+                ["knight", ["♘", "L21"]], 
+                ["pawn", ["♙", "^1|^2"]]
             ]);
+            static currentTurn = this.teams.keys().next().value;
             static board = new Board(
                 [
                     `BR BN BB BQ BK BB BN BR`,
@@ -111,6 +112,10 @@
             );
         }
 
+        function getMoves(location) {
+            
+        }
+
         const boardElement = document.getElementById("board-holder");
         for (let y = 0; y < Game.board.height; y++) {
             for (let x = 0; x < Game.board.width; x++) {
@@ -126,11 +131,11 @@
                 for (let x = 0; x < Game.board.width; x++) {
                     const element = boardElement.children[(y * (Game.board.width + 1)) + (Game.board.width - 1 - x)];
                     const tile = row[x];
-                    if (tile === null) {
+                    if (tile.piece === null) {
                         element.textContent = "";
                         continue;
                     }
-                    element.textContent = Game.pieces.get(tile.piece);
+                    element.textContent = Game.pieces.get(tile.piece)[0] ;
                     element.style.color = Game.teams.get(tile.team);
                 }
             }
